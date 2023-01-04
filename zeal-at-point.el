@@ -63,11 +63,17 @@
 
 (defvar zeal-at-point-zeal-version
   (when (executable-find "zeal")
-    (let ((output (with-temp-buffer
+    ;; windows zeal shows gui instead of actually spitting out the version to stdout
+    (if  (not (eq system-type 'windows-nt))
+        (progn (let ((output (with-temp-buffer
                     (call-process "zeal" nil t nil "--version")
                     (buffer-string))))
       (when (string-match "Zeal \\([[:digit:]\\.]+\\)" output)
         (match-string 1 output))))
+      ;; TODO: find a way to actually get this version in windows
+      "0.6.1"
+      )
+    )
   "The version of zeal installed on the system.")
 
 (defcustom zeal-at-point-mode-alist
